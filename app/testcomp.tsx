@@ -3,10 +3,10 @@
 
 import { useState, useEffect } from 'react';
 
-import { signIn, signOut } from 'next-auth/react';
-import { DefaultSession } from 'next-auth';
+import { signIn, signOut, useSession } from 'next-auth/react';
 
-export default function TimeThing({ user }: DefaultSession) {
+export default function TimeThing() {
+    const { data: session } = useSession()
     const [time, setTime] = useState<Date | null>(null);
     useEffect(() => {
         fetch('/api/time')
@@ -19,7 +19,7 @@ export default function TimeThing({ user }: DefaultSession) {
                     {time &&
                     `The time is ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`}
                 </a>
-        <p>{JSON.stringify(user)}</p>
+        <p>{JSON.stringify(session?.user)}</p>
       <button onClick={() => signIn('discord')}>Sign In</button>
       <button onClick={() => signOut()}>Sign Out</button>
     </div>);
